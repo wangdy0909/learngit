@@ -1,6 +1,3 @@
-# learngit
-learn git
-
 git命令
 
 $ git config --global user.name "Your Name"
@@ -57,7 +54,7 @@ ssh-keygen -t rsa -b 4096 -C "wdy2099@126.com" : 生成ssh-key 公钥，一路�
 
 git remote add origin https://github.com/wangdy0909/learngit.git ：添加远程库和本地库的关联
 
-git push -u origin master ：将本地库推送到远程库，第一次用-u参数， 以后不用。
+git push -u origin master ：将本地库推送到远程库，第一次用-u参数， 以后不用：git push origin master。
 			
 			wangdy@wangdy MINGW64 /e/learngit (master)
 			$ git remote add origin https://github.com/wangdy0909/learngit.git
@@ -79,5 +76,86 @@ git remote：显示所有远程库
 
 git remote rm origin ： 删除该origin远程库。
 
+git从远程库克隆版本库：git clone git@github.com:wangdy0909/repoName.git
+			
+			wangdy@wangdy MINGW64 /e
+			$ git clone git@github.com:wangdy0909/hello-world.git
+			Cloning into 'hello-world'...
+			The authenticity of host 'github.com (192.30.253.112)' can't be established.
+			RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+			Are you sure you want to continue connecting (yes/no)? yes
+			Warning: Permanently added 'github.com,192.30.253.112' (RSA) to the list of known hosts.
+			remote: Counting objects: 7, done.
+			remote: Compressing objects: 100% (4/4), done.
+			remote: Total 7 (delta 1), reused 0 (delta 0), pack-reused 0
+			Receiving objects: 100% (7/7), done.
+			Resolving deltas: 100% (1/1), done.
+			
+			wangdy@wangdy MINGW64 /e
+			$ ls
+			'$RECYCLE.BIN'/   BaiduNetdiskDownload/   basybirdCar/   hello-world/   jiaque/   KwDownload/   learngit/  'System Volume Information'/   testtxt/   workspace/   workspaceEclipse/   新建文件夹/
+			
+			wangdy@wangdy MINGW64 /e
+			$ cd hello-world/
+			
+			wangdy@wangdy MINGW64 /e/hello-world (master)
+			$ ls
+			README.md
+			
 
+创建和使用新分支：
+
+	git checkout -b 分支Name : 新建并创建新分支
+	
+	git branch 分支Name ：新建新分支
+	git branch ：查看当前分支
+	
+	git checkout 分支Name ：选择指定分支，此时HEAD指针指向选择的分支
+	
+分支开发的全部步骤：
+
+			
+			wangdy@wangdy MINGW64 /e/hello-world (master)
+			$ git checkout dev  #选择dev分支
+			Switched to branch 'dev'
+			wangdy@wangdy MINGW64 /e/hello-world (dev)
+			$ git branch #查看当前分支
+			* dev
+			  master
+			
+			wangdy@wangdy MINGW64 /e/hello-world (dev)
+			$ vi README.md  #修改文件
+			
+			wangdy@wangdy MINGW64 /e/hello-world (dev)
+			$ git add README.md #添加到缓存区
+			
+			wangdy@wangdy MINGW64 /e/hello-world (dev)
+			$ git commit -m "use Dev update file"  #提交到版本库
+			[dev 1248ce2] use Dev update file
+			 1 file changed, 2 insertions(+)
+			
+			wangdy@wangdy MINGW64 /e/hello-world (dev)
+			$ git checkout master  #返回master主分支
+			Switched to branch 'master'
+			Your branch is up-to-date with 'origin/master'.
+			
+			wangdy@wangdy MINGW64 /e/hello-world (master)
+			$ git merge dev #将dev合并到当前版本库master
+			Updating 6785215..1248ce2
+			Fast-forward
+			 README.md | 2 ++
+			 1 file changed, 2 insertions(+)
+			
+			wangdy@wangdy MINGW64 /e/hello-world (master)
+			$ git branch -d dev  #合并完成后，删除dev分支
+			Deleted branch dev (was 1248ce2).
+			
+			wangdy@wangdy MINGW64 /e/hello-world (master)
+			$ git branch  #查看分支，只剩下master
+			* master
+
+
+
+
+	
 
