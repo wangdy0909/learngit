@@ -154,6 +154,30 @@ git从远程库克隆版本库：git clone git@github.com:wangdy0909/repoName.gi
 			$ git branch  #查看分支，只剩下master
 			* master
 
+解决冲突：
+	当Git无法自动合并分支时，就必须首先手动解决冲突。解决冲突后，再提交，合并完成。
+	发生冲突后，Git在冲突的文件中，用<<<<<<<，=======，>>>>>>>标记出不同分支的内容
+	
+分支管理策略：
+	master分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面干活；
+	那在哪干活呢？干活都在dev分支上，也就是说，dev分支是不稳定的，到某个时候，比如1.0版本发布时，再把dev分支合并到master上，在master分支发布1.0版本；
+	你和你的小伙伴们每个人都在dev分支上干活，每个人都有自己的分支，时不时地往dev分支上合并就可以了。
+	语法：git merge --no-ff -m "merge with no-ff" dev ：
+	--表示合并dev分支，请注意--no-ff参数，表示禁用Fast forward（这种模式下，删除分支后，会丢掉分支信息。），因为本次合并要创建一个新的commit，所以加上-m参数，把commit描述写进去。
+
+
+bug分支管理：
+	每个bug都可以通过一个新的临时分支来修复，修复后，合并分支，然后将临时分支删除。
+	但如果你在当前分支的工作还没有完成，必须先处理这个bug的时候，就需要用到：保存当前工作，先去处理bug，然后再恢复当前工作的功能。这个步骤为：
+	1）git stash：把当前工作现场“储藏”起来，等以后恢复现场后继续工作。
+	2）切换到bug分支，处理bug。
+	3）恢复之前的工作区，
+		git stash list : 查看之前保存的工作区列表。
+		stash@{0}: WIP on dev: 6224937 add merge
+		git stash apply : 恢复工作区，但是恢复后，stash内容并不删除，你需要用git stash drop来删除；
+		git stash pop ： 恢复的同时把stash内容也删了：
+
+Feature分支：
 
 
 
