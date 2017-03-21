@@ -155,60 +155,60 @@ git从远程库克隆版本库：git clone git@github.com:wangdy0909/repoName.gi
 			* master
 
 解决冲突：
-	当Git无法自动合并分支时，就必须首先手动解决冲突。解决冲突后，再提交，合并完成。
-	发生冲突后，Git在冲突的文件中，用<<<<<<<，=======，>>>>>>>标记出不同分支的内容
+		当Git无法自动合并分支时，就必须首先手动解决冲突。解决冲突后，再提交，合并完成。
+		发生冲突后，Git在冲突的文件中，用<<<<<<<，=======，>>>>>>>标记出不同分支的内容
 	
 分支管理策略：
-	master分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面干活；
-	那在哪干活呢？干活都在dev分支上，也就是说，dev分支是不稳定的，到某个时候，比如1.0版本发布时，再把dev分支合并到master上，在master分支发布1.0版本；
-	你和你的小伙伴们每个人都在dev分支上干活，每个人都有自己的分支，时不时地往dev分支上合并就可以了。
-	语法：git merge --no-ff -m "merge with no-ff" dev ：
-	--表示合并dev分支，请注意--no-ff参数，表示禁用Fast forward（这种模式下，删除分支后，会丢掉分支信息。），因为本次合并要创建一个新的commit，所以加上-m参数，把commit描述写进去。
+		master分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面干活；
+		那在哪干活呢？干活都在dev分支上，也就是说，dev分支是不稳定的，到某个时候，比如1.0版本发布时，再把dev分支合并到master上，在master分支发布1.0版本；
+		你和你的小伙伴们每个人都在dev分支上干活，每个人都有自己的分支，时不时地往dev分支上合并就可以了。
+		语法：git merge --no-ff -m "merge with no-ff" dev ：
+		--表示合并dev分支，请注意--no-ff参数，表示禁用Fast forward（这种模式下，删除分支后，会丢掉分支信息。），因为本次合并要创建一个新的commit，所以加上-m参数，把commit描述写进去。
 
 
 bug分支管理：
-	每个bug都可以通过一个新的临时分支来修复，修复后，合并分支，然后将临时分支删除。
-	但如果你在当前分支的工作还没有完成，必须先处理这个bug的时候，就需要用到：保存当前工作，先去处理bug，然后再恢复当前工作的功能。这个步骤为：
-	1）git stash：把当前工作现场“储藏”起来，等以后恢复现场后继续工作。
-	2）切换到bug分支，处理bug。
-	3）恢复之前的工作区，
-		git stash list : 查看之前保存的工作区列表。
-		stash@{0}: WIP on dev: 6224937 add merge
-		git stash apply : 恢复工作区，但是恢复后，stash内容并不删除，你需要用git stash drop来删除；
-		git stash pop ： 恢复的同时把stash内容也删了：
+		每个bug都可以通过一个新的临时分支来修复，修复后，合并分支，然后将临时分支删除。
+		但如果你在当前分支的工作还没有完成，必须先处理这个bug的时候，就需要用到：保存当前工作，先去处理bug，然后再恢复当前工作的功能。这个步骤为：
+		1）git stash：把当前工作现场“储藏”起来，等以后恢复现场后继续工作。
+		2）切换到bug分支，处理bug。
+		3）恢复之前的工作区，
+			git stash list : 查看之前保存的工作区列表。
+			stash@{0}: WIP on dev: 6224937 add merge
+			git stash apply : 恢复工作区，但是恢复后，stash内容并不删除，你需要用git stash drop来删除；
+			git stash pop ： 恢复的同时把stash内容也删了：
 
 Feature分支：
-	开发一个新功能时候，为了不影响主分支，最好新建一个feature分支，开发完成之后，在合并到主分支。
-	git branch -D <分支name> ：强行删除一个未被合并的分支。
+		开发一个新功能时候，为了不影响主分支，最好新建一个feature分支，开发完成之后，在合并到主分支。
+		git branch -D <分支name> ：强行删除一个未被合并的分支。
 	
 多人协作：
-	master分支是主分支，因此要时刻与远程同步；
-	dev分支是开发分支，团队所有成员都需要在上面工作，所以也需要与远程同步；
-	bug分支只用于在本地修复bug，就没必要推到远程了，除非老板要看看你每周到底修复了几个bug；
-	feature分支是否推到远程，取决于你是否和你的小伙伴合作在上面开发。
-	总之，按照实际情况处理即可。
+		master分支是主分支，因此要时刻与远程同步；
+		dev分支是开发分支，团队所有成员都需要在上面工作，所以也需要与远程同步；
+		bug分支只用于在本地修复bug，就没必要推到远程了，除非老板要看看你每周到底修复了几个bug；
+		feature分支是否推到远程，取决于你是否和你的小伙伴合作在上面开发。
+		总之，按照实际情况处理即可。
 
 标签管理：
 	发布一个版本时，我们通常先在版本库中打一个标签（tag）。就类似于给版本加ID的功能，标签也是版本库的一个快照。标签就是跟某个commit关联起来，便于发布和查找。
-	1）创建标签
-		切换到需要打标签的分支上，
-		1>.git tag <tagName> : 给最近一个commit打标签， git tag v1.0
-				git tag : 查看所有标签。
-				----也可以使用commit id打标签：-----
-					$ git log --pretty=oneline --abbrev-commit  //先找到要打标签的commitID
-					c5e00ba update README.md
-					19c258a 完善README.md
-					ad64802 Create README.MD
-					107e5b8 rm test.txt
-					c7150a2 add test.txt
-					2c71d04 I update this file
-					480274e I add a txt file!
-					 
-					$ git tag v0.8 19c258a    //给对应的commitid打标签
-					
-					$ git tag   //添加标签成功
-					v0.8
-					v1.0
+		1）创建标签
+			切换到需要打标签的分支上，
+			1>.git tag <tagName> : 给最近一个commit打标签， git tag v1.0
+					git tag : 查看所有标签。
+					----也可以使用commit id打标签：-----
+						$ git log --pretty=oneline --abbrev-commit  //先找到要打标签的commitID
+						c5e00ba update README.md
+						19c258a 完善README.md
+						ad64802 Create README.MD
+						107e5b8 rm test.txt
+						c7150a2 add test.txt
+						2c71d04 I update this file
+						480274e I add a txt file!
+						 
+						$ git tag v0.8 19c258a    //给对应的commitid打标签
+						
+						$ git tag   //添加标签成功
+						v0.8
+						v1.0
 		
 		2>.git show <tagname> ：查看标签信息。会显示修改的详细信息包括你修改的内容。
 				$ git show v1.0
@@ -246,11 +246,11 @@ GitHub使用：
 	3）然后你克隆到本地，修改bug或新增功能后，即可以推送pull request给官方仓库来贡献代码。
 
 配置git：//配置Git的时候，加上--global是针对当前用户起作用的，如果不加，那只针对当前的仓库起作用。//
-	配置颜色设置：git config --global color.ui true
-	配置命令别名：git config --global alias.st status
-		-----> git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-		-----> git last ：显示最近一次提交的信息。配置成：git config --global alias.last 'log -l'
-		-----> 这个配置就根据自己的使用习惯来说了。
+		配置颜色设置：git config --global color.ui true
+		配置命令别名：git config --global alias.st status
+			-----> git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+			-----> git last ：显示最近一次提交的信息。配置成：git config --global alias.last 'log -l'
+			-----> 这个配置就根据自己的使用习惯来说了。
 
 搭建Git服务器：
 	详见：http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137583770360579bc4b458f044ce7afed3df579123eca000
