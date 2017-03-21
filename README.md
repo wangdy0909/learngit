@@ -178,7 +178,84 @@ bug分支管理：
 		git stash pop ： 恢复的同时把stash内容也删了：
 
 Feature分支：
+	开发一个新功能时候，为了不影响主分支，最好新建一个feature分支，开发完成之后，在合并到主分支。
+	git branch -D <分支name> ：强行删除一个未被合并的分支。
+	
+多人协作：
+	master分支是主分支，因此要时刻与远程同步；
+	dev分支是开发分支，团队所有成员都需要在上面工作，所以也需要与远程同步；
+	bug分支只用于在本地修复bug，就没必要推到远程了，除非老板要看看你每周到底修复了几个bug；
+	feature分支是否推到远程，取决于你是否和你的小伙伴合作在上面开发。
+	总之，按照实际情况处理即可。
 
+标签管理：
+	发布一个版本时，我们通常先在版本库中打一个标签（tag）。就类似于给版本加ID的功能，标签也是版本库的一个快照。标签就是跟某个commit关联起来，便于发布和查找。
+	1）创建标签
+		切换到需要打标签的分支上，
+		1>.git tag <tagName> : 给最近一个commit打标签， git tag v1.0
+				git tag : 查看所有标签。
+				----也可以使用commit id打标签：-----
+					$ git log --pretty=oneline --abbrev-commit  //先找到要打标签的commitID
+					c5e00ba update README.md
+					19c258a 完善README.md
+					ad64802 Create README.MD
+					107e5b8 rm test.txt
+					c7150a2 add test.txt
+					2c71d04 I update this file
+					480274e I add a txt file!
+					 
+					$ git tag v0.8 19c258a    //给对应的commitid打标签
+					
+					$ git tag   //添加标签成功
+					v0.8
+					v1.0
+		
+		2>.git show <tagname> ：查看标签信息。会显示修改的详细信息包括你修改的内容。
+				$ git show v1.0
+				commit c5e00ba2d020159af4f5a6681467982dc4805317
+				Author: wangdy <wdy2099@126.com>
+				Date:   Tue Mar 21 14:51:45 2017 +0800
+				
+				    update README.md
+				
+				diff --git a/README.md b/README.md
+				index 6749104..f020569 100644
+				--- a/README.md
+				+++ b/README.md
+				@@ -154,6 +154,30 @@ git从远程库克隆版本库：git clone git@github.com:wangdy0909/repoName.gi
+				                        $ git branch  #查看分支，只剩下master
+				                        * master
+				
+				+解决冲突：
+				+       当Git无法自动合并分支时，就必须首先手动解决冲突。解决冲突后，再提交，合并完成。
+				+       发生冲突后，Git在冲突的文件中，用<<<<<<<，=======，>>>>>>>标记出不同分支的内
+				…………… ……………… ………
+		3>.git tag -a v0.1 -m "version 0.1 released" ： 给标签添加说明信息，-a指定版本名，-m添加说明信息。
+
+	2）操作标签：
+		1>.删除标签：
+			git tag -d <tagname> ：删除本地标签
+			git push origin :refs/tags/<tagname> ：删除远程库中的标签。
+		2>.推送同步标签：
+			git push origin <tagname> ：推送指定标签
+			git push origin --tags ：推送全部标签
+		
+GitHub使用：
+	1）在GitHub上，可以任意Fork开源仓库到你的远程仓库；
+	2）这样就获取了Fork后的仓库的读写权限；
+	3）然后你克隆到本地，修改bug或新增功能后，即可以推送pull request给官方仓库来贡献代码。
+
+配置git：//配置Git的时候，加上--global是针对当前用户起作用的，如果不加，那只针对当前的仓库起作用。//
+	配置颜色设置：git config --global color.ui true
+	配置命令别名：git config --global alias.st status
+		-----> git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+		-----> git last ：显示最近一次提交的信息。配置成：git config --global alias.last 'log -l'
+		-----> 这个配置就根据自己的使用习惯来说了。
+
+搭建Git服务器：
+	详见：http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137583770360579bc4b458f044ce7afed3df579123eca000
+
+参考源：http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000 <廖大神>
 
 
 	
